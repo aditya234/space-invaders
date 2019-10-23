@@ -16,10 +16,11 @@ pygame.display.set_icon(icon)
 playerImg = pygame.image.load('./assets/spaceship.png')
 playerX = 370
 playerY = 480
+playerX_change = 0
 
 
-def player():
-    screen.blit(playerImg, (playerX, playerY))
+def player(x, y):
+    screen.blit(playerImg, (x, y))
 
 
 # game loop
@@ -31,8 +32,23 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # if keys are pressed
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                playerX_change = 5
+            if event.key == pygame.K_LEFT:
+                playerX_change = -5
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                playerX_change = 0
+    # moving player horizontally
+    playerX += playerX_change
+    if playerX <= 0:
+        playerX = 0
+    if playerX >= 736:
+        playerX = 736
 
     # drawing the player
-    player()
+    player(playerX, playerY)
     # updating the window(state)
     pygame.display.update()
