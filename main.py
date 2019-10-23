@@ -23,7 +23,8 @@ playerX_change = 0
 enemyImg = pygame.image.load('./assets/space_invader.png')
 enemyX = random.randint(0, 736)
 enemyY = random.randint(0, 150)
-enemyX_change = 0
+enemyX_change = 10
+enemyY_change = 40
 
 
 def player(x, y):
@@ -46,9 +47,9 @@ while running:
         # if keys are pressed
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                playerX_change = 5
+                playerX_change = 10
             if event.key == pygame.K_LEFT:
-                playerX_change = -5
+                playerX_change = -10
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                 playerX_change = 0
@@ -58,6 +59,15 @@ while running:
         playerX = 0
     if playerX >= 736:
         playerX = 736
+
+    # moving the enemy
+    enemyX += enemyX_change
+    if enemyX <= 0:
+        enemyX_change = 10
+        enemyY += enemyY_change
+    if enemyX >= 736:
+        enemyX_change = -10
+        enemyY += enemyY_change
 
     # drawing the player
     player(playerX, playerY)
