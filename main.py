@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # initialize pygame
 
@@ -18,9 +19,19 @@ playerX = 370
 playerY = 480
 playerX_change = 0
 
+# enemy invader
+enemyImg = pygame.image.load('./assets/space_invader.png')
+enemyX = random.randint(0, 736)
+enemyY = random.randint(0, 150)
+enemyX_change = 0
+
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
+
+
+def enemy(x, y):
+    screen.blit(enemyImg, (x, y))
 
 
 # game loop
@@ -50,5 +61,7 @@ while running:
 
     # drawing the player
     player(playerX, playerY)
+    # drawing the enemy
+    enemy(enemyX, enemyY)
     # updating the window(state)
     pygame.display.update()
