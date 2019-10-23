@@ -13,6 +13,9 @@ pygame.display.set_caption("Space war")
 icon = pygame.image.load('./assets/project_logo.png')
 pygame.display.set_icon(icon)
 
+# background
+background = pygame.image.load('./assets/background.jpg')
+
 # player
 playerImg = pygame.image.load('./assets/spaceship.png')
 playerX = 370
@@ -38,8 +41,8 @@ def enemy(x, y):
 # game loop
 running = True
 while running:
-    # filling rgb color on the screen
-    screen.fill((0, 0, 0))
+    # background image
+    screen.blit(background, (0, 0))
     # capturing events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
