@@ -4,6 +4,8 @@ import math
 from pygame import mixer
 
 from components.bullet import Bullet
+from components.enemy import Enemies
+from components.mechanics import Mechanics
 from components.player import Player
 
 # initialize pygame
@@ -32,33 +34,14 @@ score_value = 0
 player = Player(screen=screen)
 
 # enemy invader/s
-enemyImg = []
-enemyX = []
-enemyY = []
-enemyX_change = []
-enemyY_change = []
-num_of_enemies = 6
-
-for i in range(num_of_enemies):
-    enemyImg.append(pygame.image.load('./assets/space_invader.png'))
-    enemyX.append(random.randint(0, 736))
-    enemyY.append(random.randint(0, 150))
-    enemyX_change.append(10)
-    enemyY_change.append(40)
+enemies = Enemies(screen=screen, number_of_enemies=6)
+enemies.init_enemies()
 
 # bullet
 bullet = Bullet(screen=screen)
 
-
-def enemy(x, y, i):
-    screen.blit(enemyImg[i], (x, y))
-
-
-def is_collision(enemyX, enemyY, bulletX, bulletY):
-    distance = math.sqrt(math.pow(bulletX - enemyX, 2) + math.pow(bulletY - enemyY, 2))
-    if distance < 27:
-        return True
-    return False
+# mechanics
+mechanics = Mechanics()
 
 
 def display_score(x, y):
@@ -86,7 +69,7 @@ while running:
                 bullet.bullet_sound = pygame.mixer.Sound('./assets/music/fire.wav')
                 bullet.bullet_sound.play()
                 bullet.bulletX = player.playerX
-                bullet.fire_bullet(bullet.bulletX, bullet.bulletY)
+                bullet.fire_bullet(x=bullet.bulletX, y=bullet.bulletY)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                 player.playerX_change = 0
@@ -98,26 +81,26 @@ while running:
         player.playerX = 736
 
     # moving the enemies
-    for i in range(num_of_enemies):
-        enemyX[i] += enemyX_change[i]
-        if enemyX[i] <= 0:
-            enemyX_change[i] = 10
-            enemyY[i] += enemyY_change[i]
-        elif enemyX[i] >= 736:
-            enemyX_change[i] = -10
-            enemyY[i] += enemyY_change[i]
+    for i in range(enemies.num_of_enemies):
+        enemies.enemyX[i] += enemies.enemyX_change[i]
+        if enemies.enemyX[i] <= 0:
+            enemies.enemyX_change[i] = 10
+            enemies.enemyY[i] += enemies.enemyY_change[i]
+        elif enemies.enemyX[i] >= 736:
+            enemies.enemyX_change[i] = -10
+            enemies.enemyY[i] += enemies.enemyY_change[i]
         # collision
-        collision = is_collision(enemyX[i], enemyY[i], bullet.bulletX, bullet.bulletY)
+        collision = mechanics.is_collision(enemies.enemyX[i], enemies.enemyY[i], bullet.bulletX, bullet.bulletY)
         if collision:
             collision_sound = pygame.mixer.Sound('./assets/music/explosion.wav')
             collision_sound.play()
             bullet.bulletY = 480
             bullet.bullet_state = "ready"
             score_value += 1
-            enemyX[i] = random.randint(0, 736)
-            enemyY[i] = random.randint(0, 150)
+            enemies.enemyX[i] = random.randint(0, 736)
+            enemies.enemyY[i] = random.randint(0, 150)
         # drawing the enemies
-        enemy(enemyX[i], enemyY[i], i)
+        enemies.show_enemy(x=enemies.enemyX[i], y=enemies.enemyY[i], i=i)
 
     # bullet movement
     if bullet.bulletY <= 0:
