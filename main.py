@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 # initialize pygame
 
@@ -8,6 +9,10 @@ pygame.init()
 
 # creating screen of width 800 and height 600
 screen = pygame.display.set_mode((800, 600))
+
+# background music
+mixer.music.load('./assets/music/theme_music.wav')
+mixer.music.play(-1)
 
 # Title and logo
 pygame.display.set_caption("Space war")
@@ -97,6 +102,8 @@ while running:
             if event.key == pygame.K_LEFT:
                 playerX_change = -10
             if event.key == pygame.K_SPACE and bullet_state == "ready":
+                bullet_sound = pygame.mixer.Sound('./assets/music/fire.wav')
+                bullet_sound.play()
                 bulletX = playerX
                 fire_bullet(bulletX, bulletY)
         if event.type == pygame.KEYUP:
@@ -121,6 +128,8 @@ while running:
         # collision
         collision = is_collision(enemyX[i], enemyY[i], bulletX, bulletY)
         if collision:
+            collision_sound = pygame.mixer.Sound('./assets/music/explosion.wav')
+            collision_sound.play()
             bulletY = 480
             bullet_state = "ready"
             score_value += 1
