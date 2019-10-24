@@ -1,6 +1,5 @@
 import pygame
 import random
-import math
 from pygame import mixer
 
 from components.bullet import Bullet
@@ -11,22 +10,12 @@ from components.player import Player
 # initialize pygame
 
 pygame.init()
-
 # creating screen of width 800 and height 600
 screen = pygame.display.set_mode((800, 600))
-
-# background music
-mixer.music.load('./assets/music/theme_music.wav')
-mixer.music.play(-1)
-
-# Title and logo
-pygame.display.set_caption("Space war")
-icon = pygame.image.load('./assets/project_logo.png')
-pygame.display.set_icon(icon)
-
+# game status
+running = True
 # background
 background = pygame.image.load('./assets/background.jpg')
-
 # score
 score_value = 0
 
@@ -44,6 +33,17 @@ bullet = Bullet(screen=screen)
 mechanics = Mechanics()
 
 
+def set_defaults():
+    # background music
+    mixer.music.load('./assets/music/theme_music.wav')
+    mixer.music.play(-1)
+
+    # Title and logo
+    pygame.display.set_caption("Space war")
+    icon = pygame.image.load('./assets/project_logo.png')
+    pygame.display.set_icon(icon)
+
+
 def display_score(x, y):
     score_font = pygame.font.SysFont("comicsansmsttf", 36)
     text = score_font.render("Score - {0}".format(score_value), True, (255, 255, 255))
@@ -51,7 +51,7 @@ def display_score(x, y):
 
 
 # game loop
-running = True
+set_defaults()
 while running:
     # background image
     screen.blit(background, (0, 0))
