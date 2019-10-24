@@ -17,6 +17,9 @@ pygame.display.set_icon(icon)
 # background
 background = pygame.image.load('./assets/background.jpg')
 
+# score
+score_value = 0
+
 # player
 playerImg = pygame.image.load('./assets/spaceship.png')
 playerX = 370
@@ -48,9 +51,6 @@ bulletX_change = 0
 bulletY_change = 20
 bullet_state = "ready"
 
-# score
-score = 0
-
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
@@ -73,6 +73,12 @@ def is_collision(enemyX, enemyY, bulletX, bulletY):
     if distance < 27:
         return True
     return False
+
+
+def display_score(x, y):
+    score_font = pygame.font.SysFont("comicsansmsttf", 36)
+    text = score_font.render("Score - {0}".format(score_value), True, (255, 255, 255))
+    screen.blit(text, (x, y))
 
 
 # game loop
@@ -117,8 +123,7 @@ while running:
         if collision:
             bulletY = 480
             bullet_state = "ready"
-            score += 1
-            print('Score is {0}'.format(score))
+            score_value += 1
             enemyX[i] = random.randint(0, 736)
             enemyY[i] = random.randint(0, 150)
         # drawing the enemies
@@ -134,5 +139,7 @@ while running:
 
     # drawing the player
     player(playerX, playerY)
+    # displaying the score
+    display_score(0, 0)
     # updating the window(state)
     pygame.display.update()
