@@ -2,6 +2,7 @@ import pygame
 import random
 import math
 from pygame import mixer
+from components.player import Player
 
 # initialize pygame
 
@@ -26,10 +27,7 @@ background = pygame.image.load('./assets/background.jpg')
 score_value = 0
 
 # player
-playerImg = pygame.image.load('./assets/spaceship.png')
-playerX = 370
-playerY = 480
-playerX_change = 0
+player = Player()
 
 # enemy invader/s
 enemyImg = []
@@ -55,10 +53,6 @@ bulletY = 480
 bulletX_change = 0
 bulletY_change = 20
 bullet_state = "ready"
-
-
-def player(x, y):
-    screen.blit(playerImg, (x, y))
 
 
 def enemy(x, y, i):
@@ -98,23 +92,23 @@ while running:
         # if keys are pressed
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                playerX_change = 10
+                player.playerX_change = 10
             if event.key == pygame.K_LEFT:
-                playerX_change = -10
+                player.playerX_change = -10
             if event.key == pygame.K_SPACE and bullet_state == "ready":
                 bullet_sound = pygame.mixer.Sound('./assets/music/fire.wav')
                 bullet_sound.play()
-                bulletX = playerX
+                bulletX = player.playerX
                 fire_bullet(bulletX, bulletY)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
-                playerX_change = 0
+                player.playerX_change = 0
     # moving player horizontally
-    playerX += playerX_change
-    if playerX <= 0:
-        playerX = 0
-    if playerX >= 736:
-        playerX = 736
+    player.playerX += player.playerX_change
+    if player.playerX <= 0:
+        player.playerX = 0
+    if player.playerX >= 736:
+        player.playerX = 736
 
     # moving the enemies
     for i in range(num_of_enemies):
@@ -147,7 +141,7 @@ while running:
         bulletY -= bulletY_change
 
     # drawing the player
-    player(playerX, playerY)
+    player.show_player(screen=screen, x=player.playerX, y=player.playerY)
     # displaying the score
     display_score(0, 0)
     # updating the window(state)
