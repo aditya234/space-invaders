@@ -7,3 +7,4 @@ class Constants:
     project_logo = './assets/project_logo.png'
     font_name = "comicsansmsttf"
     score_text_font_size = 36
+    game_over_text_font_size = 64
