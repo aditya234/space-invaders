@@ -6,16 +6,17 @@ from components.bullet import Bullet
 from components.enemy import Enemies
 from components.mechanics import Mechanics
 from components.player import Player
+from constants import Constants
 
+constants = Constants()
 # initialize pygame
-
 pygame.init()
 # creating screen of width 800 and height 600
 screen = pygame.display.set_mode((800, 600))
 # game status
 running = True
 # background
-background = pygame.image.load('./assets/background.jpg')
+background = pygame.image.load(constants.background)
 # score
 score_value = 0
 
@@ -28,24 +29,23 @@ enemies.init_enemies()
 
 # bullet
 bullet = Bullet(screen=screen)
-
 # mechanics
 mechanics = Mechanics()
 
 
 def set_defaults():
     # background music
-    mixer.music.load('./assets/music/theme_music.wav')
+    mixer.music.load(constants.background_music)
     mixer.music.play(-1)
 
     # Title and logo
-    pygame.display.set_caption("Space war")
-    icon = pygame.image.load('./assets/project_logo.png')
+    pygame.display.set_caption(constants.title)
+    icon = pygame.image.load(constants.project_logo)
     pygame.display.set_icon(icon)
 
 
 def display_score(x, y):
-    score_font = pygame.font.SysFont("comicsansmsttf", 36)
+    score_font = pygame.font.SysFont(constants.font_name, constants.score_text_font_size)
     text = score_font.render("Score - {0}".format(score_value), True, (255, 255, 255))
     screen.blit(text, (x, y))
 
@@ -65,8 +65,8 @@ while running:
                 player.playerX_change = 10
             if event.key == pygame.K_LEFT:
                 player.playerX_change = -10
-            if event.key == pygame.K_SPACE and bullet.bullet_state == "ready":
-                bullet.bullet_sound = pygame.mixer.Sound('./assets/music/fire.wav')
+            if event.key == pygame.K_SPACE and bullet.bullet_state == bullet.ready_state:
+                bullet.bullet_sound = pygame.mixer.Sound(constants.fire_sound)
                 bullet.bullet_sound.play()
                 bullet.bulletX = player.playerX
                 bullet.fire_bullet(x=bullet.bulletX, y=bullet.bulletY)
@@ -92,10 +92,10 @@ while running:
         # collision
         collision = mechanics.is_collision(enemies.enemyX[i], enemies.enemyY[i], bullet.bulletX, bullet.bulletY)
         if collision:
-            collision_sound = pygame.mixer.Sound('./assets/music/explosion.wav')
+            collision_sound = pygame.mixer.Sound(constants.collision_sound)
             collision_sound.play()
             bullet.bulletY = 480
-            bullet.bullet_state = "ready"
+            bullet.bullet_state = bullet.ready_state
             score_value += 1
             enemies.enemyX[i] = random.randint(0, 736)
             enemies.enemyY[i] = random.randint(0, 150)
@@ -104,9 +104,9 @@ while running:
 
     # bullet movement
     if bullet.bulletY <= 0:
-        bullet.bullet_state = "ready"
+        bullet.bullet_state = bullet.ready_state
         bullet.bulletY = 480
-    if bullet.bullet_state is "fire":
+    if bullet.bullet_state is bullet.fire_state:
         bullet.fire_bullet(bullet.bulletX, bullet.bulletY)
         bullet.bulletY -= bullet.bulletY_change
 
